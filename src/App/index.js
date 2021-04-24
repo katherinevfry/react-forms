@@ -1,36 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import firebase from 'firebase';
+import firebaseConfig from '../helpers/apiKeys';
 import './App.scss';
+import StudentForm from '../StudentForm';
+import { getStudents } from '../helpers/data/StudentData';
+import StudentCard from '../components/StudentCard';
+
+firebase.initializeApp(firebaseConfig);
 
 function App() {
-  const [domWriting, setDomWriting] = useState('Nothing Here!');
+  const [students, setStudents] = useState([]);
 
-  const handleClick = (e) => {
-    console.warn(`You clicked ${e.target.id}`);
-    setDomWriting(`You clicked ${e.target.id}! Check the Console!`);
-  };
+  useEffect(() => {
+    getStudents().then((resp) => setStudents(resp));
+  }, []);
 
   return (
     <div className='App'>
-      <h2>INSIDE APP COMPONENT</h2>
-      <div>
-        <button
-          id='this-button'
-          className='btn btn-info'
-          onClick={handleClick}
-        >
-          I am THIS button
-        </button>
-      </div>
-      <div>
-        <button
-          id='that-button'
-          className='btn btn-primary mt-3'
-          onClick={handleClick}
-        >
-          I am THAT button
-        </button>
-      </div>
-      <h3>{domWriting}</h3>
+      <StudentForm formTitle='Form Title'/>
+      <hr/>
+      {students.map((studentInfo) => (
+        <StudentCard
+          key={studentInfo.firebaseKey}
+          name={studentInfo.name}
+          teacher={studentInfo.teacher}
+          grade={Number(studentInfo.grade)}
+          handleClick={() => console.warn(`${studentInfo.name}'s teacher is ${studentInfo.teacher}`)}
+        />
+      ))}
     </div>
   );
 }
