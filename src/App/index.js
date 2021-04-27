@@ -17,17 +17,19 @@ function App() {
 
   return (
     <div className='App'>
-      <StudentForm formTitle='Form Title'/>
+      <StudentForm formTitle='Form Title'
+      setStudents={setStudents}
+      />
       <hr/>
+      <div id="cardContainer">
       {students.map((studentInfo) => (
         <StudentCard
           key={studentInfo.firebaseKey}
-          name={studentInfo.name}
-          teacher={studentInfo.teacher}
-          grade={Number(studentInfo.grade)}
-          handleClick={() => console.warn(`${studentInfo.name}'s teacher is ${studentInfo.teacher}`)}
+          setStudents={setStudents}
+          {...studentInfo}
         />
       ))}
+      </div>
     </div>
   );
 }

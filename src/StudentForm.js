@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { addStudent } from './helpers/data/StudentData';
+import { addStudent, updateStudents } from './helpers/data/StudentData';
 
-const StudentForm = ({ formTitle }) => {
+const StudentForm = ({ formTitle, setStudents, ...args }) => {
   const [student, setStudent] = useState({
-    name: '',
-    teacher: '',
-    grade: 0
+    name: args?.name || '',
+    teacher: args?.teacher || '',
+    grade: args?.grade || 0,
+    firebaseKey: args?.firebaseKey || null
   });
 
   const handleInputChange = (e) => {
@@ -18,7 +19,12 @@ const StudentForm = ({ formTitle }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addStudent(student);
+    if (student.firebaseKey) {
+      console.warn('wanna update');
+      updateStudents(student).then((studentArray) => setStudents(studentArray));
+    } else {
+      addStudent(student).then((studentArray) => setStudents(studentArray));
+    }
   };
 
   return (
@@ -33,7 +39,6 @@ const StudentForm = ({ formTitle }) => {
           <input
             name="name"
             type="text"
-            placeholder="name"
             value={student.name.value}
             onChange={handleInputChange}
           ></input>
@@ -42,7 +47,6 @@ const StudentForm = ({ formTitle }) => {
           <input
             name="teacher"
             type="text"
-            placeholder="teacher"
             value={student.teacher.value}
             onChange={handleInputChange}
           ></input>
@@ -51,7 +55,6 @@ const StudentForm = ({ formTitle }) => {
           <input
             name="grade"
             type="number"
-            placeholder="grade"
             value={student.grade.value}
             onChange={handleInputChange}
           ></input>
@@ -63,7 +66,12 @@ const StudentForm = ({ formTitle }) => {
 };
 
 StudentForm.propTypes = {
-  formTitle: PropTypes.string.isRequired
+  formTitle: PropTypes.string.isRequired,
+  setStudents: PropTypes.func,
+  name: PropTypes.string,
+  teacher: PropTypes.string,
+  grade: PropTypes.number,
+  firebaseKey: PropTypes.string
 };
 
 export default StudentForm;
