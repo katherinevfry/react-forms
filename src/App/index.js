@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import firebase from 'firebase';
-import firebaseConfig from '../helpers/apiKeys';
-import './App.scss';
-import StudentForm from '../StudentForm';
+import { BrowserRouter as Router } from 'react-router-dom';
+import NavBar from '../components/NavBar';
 import { getStudents } from '../helpers/data/StudentData';
-import StudentCard from '../components/StudentCard';
-
-firebase.initializeApp(firebaseConfig);
+import Routes from '../helpers/Routes';
+import './App.scss';
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -16,21 +13,14 @@ function App() {
   }, []);
 
   return (
-    <div className='App'>
-      <StudentForm formTitle='Form Title'
-      setStudents={setStudents}
-      />
-      <hr/>
-      <div id="cardContainer">
-      {students.map((studentInfo) => (
-        <StudentCard
-          key={studentInfo.firebaseKey}
-          setStudents={setStudents}
-          {...studentInfo}
-        />
-      ))}
-      </div>
-    </div>
+    <>
+    <Router>
+      <NavBar />
+      <Routes
+      students={students}
+      setStudents={setStudents} />
+    </Router>
+    </>
   );
 }
 
