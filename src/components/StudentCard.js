@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Card,
   CardTitle,
@@ -25,11 +26,18 @@ const StudentCard = ({ setStudents, ...student }) => {
     }
   };
 
+  const history = useHistory();
+
+  function viewStudent() {
+    history.push(`student/${student.firebaseKey}`);
+  }
+
   return (
 <Card id="card" body>
       <CardTitle tag="h5">{student.name}</CardTitle>
       <CardText>{student.grade}</CardText>
       <CardText>{student.teacher}</CardText>
+      <Button color="warning" onClick={viewStudent}>View Student</Button>
      <Button color="danger" onClick={() => handleClick('delete')}>Delete Student</Button>
      <Button color="info" onClick={() => handleClick('edit')}>
        {editing ? 'Close Form' : 'Edit Student'}

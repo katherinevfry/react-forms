@@ -13,7 +13,7 @@ function Home({ user }) {
 }
 
 Home.propTypes = {
-  user: PropTypes.any
+  user: PropTypes.any,
 };
 
 export default Home;
